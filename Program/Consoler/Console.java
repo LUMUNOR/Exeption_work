@@ -1,3 +1,7 @@
+package Consoler;
+
+import java.util.Scanner;
+
 public class Console{
     private Scanner scanner;
     private String info;
