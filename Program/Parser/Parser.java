@@ -75,5 +75,12 @@ public class Parser {
         if (split.length != 3){
             throw new DataExeption("Неверный формат даты рождения!");
         }
+        return true;
+    }
+
+    public boolean checkNumber(String[] numbers){
+        for (int i=0; i<numbers.length; i++){
+            
+        }
     }
 }
