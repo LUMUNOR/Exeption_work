@@ -1,5 +1,6 @@
 package Parser;
 
+import Exeptions.DataExeption;
 import Exeptions.QuantityExeption;
 import Exeptions.WordExeption;
 
@@ -8,6 +9,10 @@ import Exeptions.WordExeption;
 public class Parser {
     private String inInfo;
     private String[] info;
+    private String surname,name,patronymic;
+    private String birthday;
+    private Long number;
+    private char gender;
 
     public Parser(String inputInfo){
         this.inInfo = inputInfo;
@@ -33,13 +38,24 @@ public class Parser {
         }
 
         try {
-            if (checkString(info[0])) System.out.println("yes");
+            for (int i=0; i<3; i++){
+                if (checkString(info[i])){
+                    switch (i) {
+                        case 0:
+                            this.surname = info[i];
+                            break;
+                        case 1:
+                            this.name = info[i];
+                            break;
+                        case 2:
+                            this.patronymic = info[i];
+                            break;
+                    }
+                }
+            }
         } catch (WordExeption e) {
             System.out.println("Ошибка: " + e.getMessage());
         }
-        //String surname = info[0];
-        //String name = info[1];
-        //String patronymic = info[2];
 
     }
 
@@ -54,4 +70,10 @@ public class Parser {
         return true;
     }
 
+    public boolean checkData(String string) throws DataExeption{
+        String[] split = string.split(".");
+        if (split.length != 3){
+            throw new DataExeption("Неверный формат даты рождения!");
+        }
+    }
 }
