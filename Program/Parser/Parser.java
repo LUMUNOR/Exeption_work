@@ -18,12 +18,12 @@ public class Parser {
         this.inInfo = inputInfo;
     }
 
-    public String[] splitInfo(String input) throws QuantityExeption{
+    private String[] splitInfo(String input) throws QuantityExeption{
         String[] split = input.split(" ");
-        if (split.length < 5){
+        if (split.length < 6){
             throw new QuantityExeption("Вы ввели недостаточно данных!");
         }
-        if (split.length > 5){
+        if (split.length > 6){
             throw new QuantityExeption("Вы ввели избыточное количество данных!");
         }
         return split;
@@ -57,9 +57,17 @@ public class Parser {
             System.out.println("Ошибка: " + e.getMessage());
         }
 
+        try {
+            checkData(info[3]);
+            birthday = info[3];
+            System.out.println(birthday);
+        } catch (DataExeption e) {
+            System.out.println("Ошибка: " + e.getMessage());
+        }
+
     }
 
-    public boolean checkString(String string) throws WordExeption{
+    private boolean checkString(String string) throws WordExeption{
         char[] chars = string.toCharArray();
 
         for (char c : chars) {
@@ -70,17 +78,33 @@ public class Parser {
         return true;
     }
 
-    public boolean checkData(String string) throws DataExeption{
-        String[] split = string.split(".");
-        if (split.length != 3){
-            throw new DataExeption("Неверный формат даты рождения!");
-        }
-        return true;
+    private boolean checkData(String string) throws DataExeption{
+        String[] split = string.split("\\.");
+        if ((split.length == 3)&&(checkNumber(split))){
+             return true;
+        } else throw new DataExeption("Неверный формат даты рождения!");
     }
 
-    public boolean checkNumber(String[] numbers){
+    private boolean checkNumber(String[] numbers){
+        int[] data = new int[numbers.length];
         for (int i=0; i<numbers.length; i++){
-            
+            try {
+                data[i] = Integer.parseInt(numbers[i]);
+            } catch (NumberFormatException e) {
+                System.out.println("NumberFormatExeption");
+                return false;
+            }
         }
+        if (!((data[0] > 0)&&(data[0] <= 2024 ))){
+            System.out.println("1");
+            return false;
+        }
+        if (!((data[1] > 0)&&(data[1] <= 12 ))){
+            System.out.println("2");
+            return false;
+        }
+        if (!((data[2] > 0)&&(data[2] <= 31 )))return false;
+
+        return true;
     }
 }
