@@ -1,6 +1,8 @@
 package Parser;
 
 import Exeptions.DataExeption;
+import Exeptions.GenderExeption;
+import Exeptions.PhoneExeption;
 import Exeptions.QuantityExeption;
 import Exeptions.WordExeption;
 
@@ -9,10 +11,7 @@ import Exeptions.WordExeption;
 public class Parser {
     private String inInfo;
     private String[] info;
-    private String surname,name,patronymic;
-    private String birthday;
-    private Long number;
-    private char gender;
+    private boolean flag;
 
     public Parser(String inputInfo){
         this.inInfo = inputInfo;
@@ -29,41 +28,48 @@ public class Parser {
         return split;
     }
 
-    public void work(){
-        
+    public String[] work(){
+        this.flag = true;
+        // Проверка количества данных
         try {
             this.info = splitInfo(inInfo);
         } catch (QuantityExeption e) {
+            this.flag = false;
             System.out.println("Ошибка: " + e.getMessage());
         }
-
+        // Проверка ФИО
         try {
             for (int i=0; i<3; i++){
-                if (checkString(info[i])){
-                    switch (i) {
-                        case 0:
-                            this.surname = info[i];
-                            break;
-                        case 1:
-                            this.name = info[i];
-                            break;
-                        case 2:
-                            this.patronymic = info[i];
-                            break;
-                    }
-                }
+                checkString(info[i]);
             }
         } catch (WordExeption e) {
+            this.flag = false;
             System.out.println("Ошибка: " + e.getMessage());
         }
-
+        // Проверка даты рождения
         try {
             checkData(info[3]);
-            birthday = info[3];
-            System.out.println(birthday);
         } catch (DataExeption e) {
+            this.flag = false;
             System.out.println("Ошибка: " + e.getMessage());
         }
+        // Проверка номера телефона
+        try {
+            checPhone(info[4]);
+        } catch (PhoneExeption e) {
+            this.flag = false;
+            System.out.println("Ошибка: " + e.getMessage());
+        }
+        // Проверка пола
+        try {
+            checGender(info[5]);
+        } catch (GenderExeption e) {
+            this.flag = false;
+            System.out.println("Ошибка: " + e.getMessage());    
+        }
+
+        if (this.flag) return info;
+        else return null;
 
     }
 
@@ -91,20 +97,32 @@ public class Parser {
             try {
                 data[i] = Integer.parseInt(numbers[i]);
             } catch (NumberFormatException e) {
-                System.out.println("NumberFormatExeption");
+                System.out.println("NumberFormatExeption!");
                 return false;
             }
         }
-        if (!((data[0] > 0)&&(data[0] <= 2024 ))){
-            System.out.println("1");
-            return false;
-        }
-        if (!((data[1] > 0)&&(data[1] <= 12 ))){
-            System.out.println("2");
-            return false;
-        }
-        if (!((data[2] > 0)&&(data[2] <= 31 )))return false;
+        if (!((data[0] > 0)&&(data[0] <= 2024 ))) return false;
+        if (!((data[1] > 0)&&(data[1] <= 12 ))) return false;
+        if (!((data[2] > 0)&&(data[2] <= 31 ))) return false;
 
         return true;
+    }
+
+    private boolean checPhone (String phone) throws PhoneExeption{
+        char[] chars = phone.toCharArray();
+
+        for (char c : chars) {
+            if(!Character.isDigit(c)) {
+                throw new PhoneExeption("Неверный формат номера телефона!");
+            }
+        }
+        return true;       
+    }
+
+    private boolean checGender (String gender) throws GenderExeption{
+        if (gender.equals("f")||(gender.equals("m"))){
+            return true;
+        }
+        else throw new GenderExeption("Неверный формат пола!");
     }
 }
