@@ -10,13 +10,11 @@ public class Console{
         scanner = new  Scanner(System.in);
     }
 
-    private void work(){
+    public String getInfo(){
+        System.out.println("--------------------------");
+        System.out.println("Для остановки программы введите ПРОБЕЛ");
         System.out.println("Введите разделяя пробелом: Фамилию Имя Отчество датурождения номертелефона пол(f\\m)\n");
         this.info = scanner.nextLine();
-    }
-
-    public String getInfo(){
-        work();
         return info;
     }
 }

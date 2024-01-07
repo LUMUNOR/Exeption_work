@@ -6,15 +6,12 @@ import Exeptions.PhoneExeption;
 import Exeptions.QuantityExeption;
 import Exeptions.WordExeption;
 
-//import java.util.ArrayList;
-
 public class Parser {
-    private String inInfo;
     private String[] info;
     private boolean flag;
 
-    public Parser(String inputInfo){
-        this.inInfo = inputInfo;
+    public Parser(){
+        this.flag = true;
     }
 
     private String[] splitInfo(String input) throws QuantityExeption{
@@ -28,7 +25,7 @@ public class Parser {
         return split;
     }
 
-    public String[] work(){
+    public String[] work(String inInfo){
         this.flag = true;
         // Проверка количества данных
         try {
@@ -36,6 +33,7 @@ public class Parser {
         } catch (QuantityExeption e) {
             this.flag = false;
             System.out.println("Ошибка: " + e.getMessage());
+            return null;
         }
         // Проверка ФИО
         try {
